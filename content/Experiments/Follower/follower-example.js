@@ -40,19 +40,6 @@ function createTrailers(numFollowers){
   var $doc = $(document),
       dragging;
   
-  var alertedBefore = false;
-  
-  function dragStart(e){
-    e.preventDefault();
-    dragging = true;
-    $doc.on({
-      'touchmove.dragFollower': touchMove,
-      'mousemove.dragFollower': mouseMove,
-      'touchend.dragFollower': dragEnd,
-      'mouseup.dragFollower': dragEnd
-    });
-    return false;
-  }
   function mouseMove(e){
     var coords = getRelMouseCoords($canvas[0], {x: e.clientX, y: e.clientY});
     dragMove(coords);
@@ -60,13 +47,8 @@ function createTrailers(numFollowers){
   
   function touchMove(e){
     e.preventDefault;
-    var coords = new Generics.Point2D(Math.random()*1000, Math.random() * 1000);  
+    var coords = new Generics.Point2D(Math.random()*1000, Math.random() * 1000);
     
-    if(!alertedBefore){
-      alert(e.changedTouches.length || 'hoi');
-      alert(coords.x + ', ' + coords.y);
-      alertedBefore = true;
-    }
     dragMove(coords);
   }
   function dragMove(relCoords){
@@ -84,42 +66,11 @@ function createTrailers(numFollowers){
       follower.draw(secondContext);
     }
   }
-  function dragEnd(e){
-    dragging = false;
-    $doc.off('touchmove.dragFollower');
-    $doc.off('mousemove.dragFollower');
-    $doc.off('mouseup.dragFollower');
-    $doc.off('touchend.mousemove');
-  }
   
   $canvas.on({
-    'mousedown.dragFollower': dragStart,
-    'touchstart.dragFollower': dragStart
+    'touchmove.dragFollower': touchMove,
+    'mousemove.dragFollower': mouseMove
   });
-  
-  var $canvasOffset = $canvas.offset();
-  
-  console.log({top: $canvasOffset.top + $canvas.height() / 2 + 'px', left: $canvasOffset.left + $canvas.width() / 2 + 'px'});
-  
-  //pep and dragmaster effectively replaces all regular drag handlers
-  var $dragMaster = $('<div id="followerMaster" class="circle red"/>'),
-      dmW = $dragMaster.width() / 2,
-      dmH = $dragMaster.height() / 2;
-  
-  $dragMaster
-    .appendTo(document.body)
-    .css({top: $canvasOffset.top + $canvas.height() / 2 + 'px', left: $canvasOffset.left + $canvas.width() / 2 + 'px'})
-    .pep({
-      drag: function(e){
-        console.log(e);
-        var position = $dragMaster.position(),
-            coords = getRelMouseCoords($canvas[0], {x: position.left, y: position.top});
-        coords.x += dmW;
-        coords.y += dmH;
-        dragMove(coords);
-      }
-    })
-  ;
 }
 
 function Circle(color, radius, x, y){
