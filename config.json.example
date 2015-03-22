@@ -1,0 +1,13 @@
+{
+	"sitename": "my site",
+	"port": 2323,
+	"homesection": "News",
+	"contentPath": "content",
+	"publicPath": "public",
+	"imageCacheLimit": 100,
+	"mailgunSettings": {
+		"domain": "user.mailgun.org",
+		"key": "mailgunkey",
+		"defaultAddress": "user@domain.com"
+ 	}
+}

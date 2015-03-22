@@ -1,0 +1,162 @@
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body {
+  font-family: sans-serif;
+  background: black;
+}
+#wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+header {
+  text-align: center;
+  position: relative;
+}
+a {
+  color: #ff1e00;
+}
+a.readmore {
+  display: block;
+  text-align: center;
+  color: #ffe100;
+  text-decoration: none;
+}
+a.readmore:hover {
+  text-decoration: underline;
+}
+a.readmore:after {
+  color: #ffe100;
+  content: 'See more';
+  font-weight: heavy;
+  text-decoration: none;
+}
+header > nav {
+  display: block;
+  text-align: center;
+}
+header > nav a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: white;
+  padding: 2px 5px;
+  font-family: arial;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 0 3px black;
+  transition: font-size 0.5s;
+  -webkit-transition: font-size 0.5s;
+}
+header > nav a:hover {
+  color: yellow;
+  font-size: 25px;
+}
+header > nav a.active {
+  font-size: 30px;
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
+header > nav a.active:hover {
+  color: yellow;
+}
+#content > section,
+#content > article {
+  clear: both;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  box-sizing: content-box;
+  border-radius: 50px;
+  border: 10px solid white;
+  padding: 20px 60px 30px 60px;
+  box-shadow: 0 0 30px black inset, 0 0 15px black inset, 0 0 25px white, 0 0 12px white;
+}
+#content > section h1,
+#content > article h1 {
+  color: white;
+  text-align: center;
+}
+#content > section h1:before,
+#content > article h1:before {
+  content: '(( ';
+}
+#content > section h1:after,
+#content > article h1:after {
+  content: ' ))';
+}
+#content > section h2,
+#content > article h2 {
+  margin-top: 0;
+  text-align: center;
+  border-bottom: 1px dashed white;
+}
+#content > section h2 > a,
+#content > article h2 > a {
+  text-decoration: none;
+  color: white;
+}
+#content > section h2 > a:before,
+#content > article h2 > a:before {
+  content: '/// ';
+}
+#content > section h2 > a:after,
+#content > article h2 > a:after {
+  content: ' \\\\\\';
+}
+#content > section h2 > a:hover,
+#content > article h2 > a:hover {
+  color: yellow;
+}
+#content > section h3,
+#content > article h3 {
+  margin-left: 30px;
+  margin-right: 300px;
+  padding-left: 30px;
+  border-bottom: 1px dashed grey;
+}
+#content > section > p,
+#content > article > p {
+  margin: 30px 40px 30px 70px;
+}
+#content > section article,
+#content > article article {
+  border-radius: 25px;
+  border: 5px solid white;
+  padding: 5px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px black inset, 0 0 7px black inset, 0 0 12px white, 0 0 6px white;
+}
+#content > section article:not(:last-child),
+#content > article article:not(:last-child) {
+  margin-bottom: 30px;
+}
+#content > section article img,
+#content > article article img {
+  display: block;
+  margin: 0 auto;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+#FolderCMSForm {
+  border: 1px solid black;
+  width: 300px;
+  margin: 0 auto;
+  padding: 0 10px 10px 10px;
+  box-shadow: 2px 2px 3px #888888 inset;
+}
+#FolderCMSForm label {
+  text-align: right;
+  display: inline-block;
+  width: 100px;
+}
+#FolderCMSForm input,
+#FolderCMSForm textarea {
+  box-shadow: 2px 2px 3px #888888;
+}
+.button {
+  background-color: #CCC;
+  border: 2px #CCC outset;
+  padding: 0 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
