@@ -4,7 +4,7 @@
   "description": "a test project to rewrite hop in",
   "main": "app.js",
   "dependencies": {
-    "hopCMS": "^0.1.0"
+    "hopcms": "*"
   },
   "devDependencies": {},
   "scripts": {
