@@ -1,31 +1,29 @@
-$(document).ready(followerInit);
-
-//var $dragMaster = $('#followerMaster');
+$('#start').on('click', followerInit);
 
 function followerInit(){
   createTrailers(100);
 }
 
 function createTrailers(numFollowers){
-  var $canvas = $('<canvas width="1000" height="500">')
-      .appendTo('#Follower.exclusive')
-      .css({border: '1px solid black', position: 'absolute', top: $('#Follower').offset().top + 'px' }),
+  var $overlay = $('body').overlay(),
+      width = $overlay.width(),
+      height = $overlay.height(),
+      $canvas = $('<canvas width="' + width + '" height="' + height + '">')
+        .appendTo($overlay)
+        .css({border: '1px solid black', position: 'absolute' }),
       context = $canvas[0].getContext('2d'),
-      $secondCanvas = $('<canvas width="1000" height="500">')
-      .prependTo('#Follower')
-      .css({border: '1px solid black', position: 'absolute', top: $canvas.position().top + 'px', left: $canvas.position().left + 'px'}),
+      $secondCanvas = $('<canvas width="' + width + '" height="' + height + '" style="position: absolute; opacity: 0.5">')
+        .prependTo($overlay)
       secondContext = $secondCanvas[0].getContext('2d'),
       leader = new Circle('rgb(255,0,0)', 10, 50, 70),
       followers = [];
   
-  $('#Follower.exclusive').css({height: 700});
-  
   context.clear = function(){
-    context.clearRect(0,0,1000,500);
+    context.clearRect(0,0,width,height);
   }
   secondContext.fillWithColor = function(color){
     context.fillStyle = color;
-    context.fillRect(0,0,1000,500);
+    context.fillRect(0,0,width,height);
   }
   
   while(followers.length < numFollowers){
@@ -86,7 +84,7 @@ Circle.prototype.draw = function(context){
   context.fillStyle = this.color;
   context.fill();
   context.restore();
-}
+};
 
 function Arrow(color, size, x, y, orientation){
   this.color = color;
@@ -112,7 +110,7 @@ Arrow.prototype.draw = function(context){
   context.fillStyle = this.color;
   context.fill();
   context.restore();
-}
+};
 Arrow.prototype.follow = function(leader, maxDistance, minDistance){
   var dX = leader.x - this.x,
       dY = leader.y - this.y,
@@ -129,4 +127,4 @@ Arrow.prototype.follow = function(leader, maxDistance, minDistance){
     this.y += nY;
   }
   this.orientation = angle;
-}
+};
