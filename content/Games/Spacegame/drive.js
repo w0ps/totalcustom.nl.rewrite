@@ -68,7 +68,7 @@ $(document).ready(function() {
 		{ keyName: 'space',
 			release: function(){ I.rocketfire = 1; }
 		},
-		{ keyName: 'ctrl',
+		{ keyName: 'shift',
 			press: function(){ I.shooting = 1; },
 			release: function(){ I.shooting = 0; }
 		},
@@ -84,7 +84,7 @@ $(document).ready(function() {
       }
 		},
 		{ keyName: 'h',
-			release: function(){ alert('arrows: move around.\nctrl: shoot.\nspace: spawn homing missile.\ncaps-lock: change color.\nenter: respawn\nshift: change trails.\ntilde: drop mine\n2: spawn enemy\nt: target closest enemy'); }
+			release: function(){ alert('arrows: move around.\nshift: shoot.\nspace: spawn homing missile.\ncaps-lock: change color.\nenter: respawn\nshift: change trails.\ntilde: drop mine\n2: spawn enemy\nt: target closest enemy'); }
 		},
 		{ keyName: 'capslock',
 			release: function(){

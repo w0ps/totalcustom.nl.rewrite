@@ -1,6 +1,6 @@
 Controls:<br>
 enter: (re)spawn<br>
-ctrl: shoot laser<br>
+shift: shoot laser<br>
 spacebar: shoot guided missile<br>
 T: target<br>
 tilde: drop mine<br>
