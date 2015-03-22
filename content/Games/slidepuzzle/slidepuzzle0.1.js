@@ -207,7 +207,7 @@ $.fn.slidePuzzle = function(options){
 	this.remove();
 	
 	if(options.useKeys){
-		$(window).off('keyup.slidePuzzle').on('keyup.slidePuzzle', function(event){
+		$(document).off('keyup.slidePuzzle').on('keyup.slidePuzzle', function(event){
 			var dir;
 			switch(event.keyCode){
 				case 40: dir = 'u'; break;
@@ -223,6 +223,8 @@ $.fn.slidePuzzle = function(options){
 						target = grid.get.apply(grid, [targetX, targetY]);
 				
 				if(target) target.element.click();
+				event.preventDefault();
+				return false;
 			}
 		});
 	}

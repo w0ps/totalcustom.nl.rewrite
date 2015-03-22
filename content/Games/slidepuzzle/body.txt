@@ -2,5 +2,8 @@ Paste an image location in the box below and press load, or take a look around m
 
 
 <br><br>
-<input id="imageSrc" style="clear:both;" type="text" placeholder="url to image"><input type="button" value="Load" onclick="location.hash = $('#imageSrc').val();"/><br>
+<input id="imageSrc" style="clear:both;" type="text" placeholder="url to image"><input type="button" value="Load" onclick="location.hash = $('#imageSrc').val();"/>
+<br>
+<label><input id="x" value="3" type="number">x segments</label><br>
+<label><input id="y" value="3" type="number">y segments</label>
 <div id="previousImagesContainer"></div>
