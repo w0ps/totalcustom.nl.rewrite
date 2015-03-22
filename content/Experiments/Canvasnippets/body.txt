@@ -45,7 +45,7 @@
 
 	<span class="caption">Full blown visual chaos</span>
 	<figure name="circlemayhem" class="example">
-	<button id="initDemo">Start the mayhem!</button>
+	<button id="initDemo">Start the mayhem!</button> - press esc to close
 
 </section>
 <section id="SFF">
