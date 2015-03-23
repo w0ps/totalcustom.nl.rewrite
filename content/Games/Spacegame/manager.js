@@ -4,3 +4,5 @@
 //  console.log('inited: ', arguments)
 //  server = serv;
 //});
+
+$('#start').on('click', initSpaceGame);

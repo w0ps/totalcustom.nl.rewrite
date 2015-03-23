@@ -4,5 +4,5 @@ shift: shoot laser<br>
 spacebar: shoot guided missile<br>
 T: target<br>
 tilde: drop mine<br>
-2: spawn enemy<br>
-<div id="spacearea"></div>
+2: spawn enemy<br><br>
+<button id="start">Play!</button>

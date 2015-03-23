@@ -1,14 +1,12 @@
-$(document).ready(function() {
-	if($('#Spacegame').hasClass('overview')) return;
-	
-	var $spacegame = $('#spacearea');
-	var winwidth = Number($spacegame.innerWidth());
-	var winheight = Number($spacegame.innerHeight());
+function initSpaceGame() {
+	var $overlay = $('body').overlay();
+	var winwidth = Number($overlay.innerWidth());
+	var winheight = Number($overlay.innerHeight());
 	var graph = document.createElement("canvas");
 	graph.setAttribute("id", "spacecanvas");
 	graph.setAttribute("width", winwidth); 
 	graph.setAttribute("height", winheight);
-	$spacegame.append(graph);
+	$overlay.append(graph);
 	var canvas = graph;
 	if (typeof canvas.getContext != "undefined"){
 		var context = canvas.getContext("2d");	
@@ -1314,4 +1312,4 @@ $(document).ready(function() {
 		}
 		
 	}	
-});
+}
