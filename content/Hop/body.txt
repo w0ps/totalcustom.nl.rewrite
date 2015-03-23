@@ -1,24 +1,15 @@
-This site is built with my own CMS.<br>
-It's designed to be easily managed by people with little technical knowledge.<br>
-A webmaster can change the contents of his site just by adding folders, text files and images.<br>
-For the more advanced: scripts and stylesheets are included as well.
+this site is originally built to test and showcase hopcms,
+a kind of static site generator, which loads files from disk and generates pages.
+It is good for rapid prototyping, as images, css and js files are added automatically.
+Recently I reworked a great deal of source code to allow hopcms to be a requireable npm module,
+improving version control a lot.<br><br>
 
-<h3>Features</h3>
-<ul>
-    <li>Easily put texts and images on your site through a dropbox connection</li>
-    <li>Include stylesheets (css/less) and javascripts just by putting them in the right folder
-    <li>Automatic page refresh when logged on</li>
-</ul>
+Also, as you may have seen already, it features somewhat over the top page transitions.
+Rest assured that these can be picked, altered and expanded upon for each website that uses this system.
+Tied in with the transitions is dynamic content loading, which starts downloading the new content as soon as
+you hover over a link, in order to provide lightning-fast loading times.<br><br>
 
-<h3>Todo's</h3>
-<ul>
-    <li>Webfonts support</li>
-    <li>Lightbox for images</li>
-    <li>Default css scheme</li>
-</ul>
+Included with the cms is a custom built lightbox, featuring a filmstrip and supporting custom intents,
+such as the one included here, the ability to import the image viewed into the slidepuzzle game.<br><br>
 
-<h3>Showcases</h3>
-<ul>
-    <li>This website</li>
-    <li><a href="http://www.christiaanstam.com">christiaanstam.com</a></li>
-</ul>
+<a href="http://github.com/w0ps/hop">View the source on Github!</a>
