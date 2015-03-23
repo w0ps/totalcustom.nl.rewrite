@@ -1,0 +1,1 @@
+<button id="start">Toy with the prototype</button>

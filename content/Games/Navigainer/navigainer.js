@@ -213,7 +213,3 @@ function getIntersects(x, y, width, height, projector, camera, collection){
   //debugger;
   return ray.intersectObjects( collection );
 }
-
-
-var aNavigainer = new Navigainer();
-    aNavigainer.start();

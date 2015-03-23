@@ -1,51 +1,48 @@
-var gui = new dat.GUI({
-});
+function initNavigainerInterface(){
 
-var mouse = {
-  //rollOffList: [],
-  //rollOff: function(){
-  //  
-  //}
-};
+  var gui = new dat.GUI({
+  });
 
-$('.dg.ac').appendTo('div[data-role="overlay"]');
+  $('.dg.ac').appendTo('div[data-role="overlay"]');
 
-var gameControls = gui.addFolder('Game controls');
-gameControls.add(aNavigainer, 'start');
-//gameControls.add(aNavigainer, 'pause');
-gameControls.add(aNavigainer, 'stop');
-gameControls.add(aNavigainer, 'granularity', 0, 1000);
-gameControls.add(aNavigainer, 'speed', 0.01, 2);
+  var gameControls = gui.addFolder('Game controls');
+  gameControls.add(aNavigainer, 'start');
+  //gameControls.add(aNavigainer, 'pause');
+  gameControls.add(aNavigainer, 'stop');
+  gameControls.add(aNavigainer, 'granularity', 0, 1000);
+  gameControls.add(aNavigainer, 'speed', 0.01, 2);
 
-gameControls.add(aNavigainer, 'toggleEditMode');
+  gameControls.add(aNavigainer, 'toggleEditMode');
 
-var cameraControls = gui.addFolder('Camera controls');
-cameraControls.add(window, 'fspeed', -5, 5);
-var fovcontroller = cameraControls.add(aNavigainer.camera, 'fov', 25, 120).listen();
-fovcontroller.onChange(function(arg){
-  aNavigainer.camera.updateProjectionMatrix()  ;
-});
-cameraControls.add(aNavigainer.camera.position, 'x', -1000, 1000);
-cameraControls.add(aNavigainer.camera.position, 'y',  -100, 200);
-cameraControls.add(aNavigainer.camera.position, 'z', -1000, 1000);
+  var cameraControls = gui.addFolder('Camera controls');
+  cameraControls.add(window, 'fspeed', -5, 5);
+  var fovcontroller = cameraControls.add(aNavigainer.camera, 'fov', 25, 120).listen();
+  fovcontroller.onChange(function(arg){
+    aNavigainer.camera.updateProjectionMatrix()  ;
+  });
+  cameraControls.add(aNavigainer.camera.position, 'x', -1000, 1000);
+  cameraControls.add(aNavigainer.camera.position, 'y',  -100, 200);
+  cameraControls.add(aNavigainer.camera.position, 'z', -1000, 1000);
 
-var classicRotation = cameraControls.addFolder('Classic Rotation');
-classicRotation.add(aNavigainer.camera.rotation, 'x', 0, 2 * Math.PI);
-classicRotation.add(aNavigainer.camera.rotation, 'y', 0, 2 * Math.PI);
-classicRotation.add(aNavigainer.camera.rotation, 'z', 0, 2 * Math.PI);
-//classicRotation.add(aNavigainer.camera, 'eulerOrder', ['XYZ', 'XZY', 'YXZ', 'YZX', 'ZXY', 'ZYX']);
+  var classicRotation = cameraControls.addFolder('Classic Rotation');
+  classicRotation.add(aNavigainer.camera.rotation, 'x', 0, 2 * Math.PI);
+  classicRotation.add(aNavigainer.camera.rotation, 'y', 0, 2 * Math.PI);
+  classicRotation.add(aNavigainer.camera.rotation, 'z', 0, 2 * Math.PI);
+  //classicRotation.add(aNavigainer.camera, 'eulerOrder', ['XYZ', 'XZY', 'YXZ', 'YZX', 'ZXY', 'ZYX']);
 
-//var quaternionRotation = cameraControls.addFolder('Quaternion Rotation');
-//quaternionRotation.add(aNavigainer.camera.quaternion, 'w', -1 , 1);
-//quaternionRotation.add(aNavigainer.camera.quaternion, 'x', -4 , 4);
-//quaternionRotation.add(aNavigainer.camera.quaternion, 'y', -4 , 4);
-//quaternionRotation.add(aNavigainer.camera.quaternion, 'z', -4 , 4);
+  //var quaternionRotation = cameraControls.addFolder('Quaternion Rotation');
+  //quaternionRotation.add(aNavigainer.camera.quaternion, 'w', -1 , 1);
+  //quaternionRotation.add(aNavigainer.camera.quaternion, 'x', -4 , 4);
+  //quaternionRotation.add(aNavigainer.camera.quaternion, 'y', -4 , 4);
+  //quaternionRotation.add(aNavigainer.camera.quaternion, 'z', -4 , 4);
 
-gui.add(window, 'CreateIntersection');
-gui.add(window, 'CreateRandomStreet');
-gui.add(window, 'CreateRandomCar');
+  gui.add(window, 'CreateIntersection');
+  gui.add(window, 'CreateRandomStreet');
+  gui.add(window, 'CreateRandomCar');
 
-assignEditorHandlers();
+  assignEditorHandlers();
+}
+
 
 function CreateRandomStreet(){
   aNavigainer.createStreet(pickADirection(pickAnIntersection()), pickADirection(pickAnIntersection()));
@@ -58,6 +55,13 @@ function CreateRandomCar() {
   //aNavigainer.camera.lookAt(car.model);
 }
 
+var mouse = {
+    //rollOffList: [],
+    //rollOff: function(){
+    //  
+    //}
+  };
+  
 function assignEditorHandlers(){
     var projector = new THREE.Projector(),
         $screen = $(aNavigainer.viewport.renderer.domElement);
@@ -113,7 +117,7 @@ function assignEditorHandlers(){
       $screen.one('mouseup.dragObject', upHandler);
       $screen.one('touchend.dragObject', upHandler);
 
-      this.moveHandler 
+      this.moveHandler;
     }
     
     function pointerDown(e) {
