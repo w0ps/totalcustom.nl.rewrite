@@ -1,1 +1,3 @@
-An experiment for now
+Navigainer is to be a multiplayer game about reaching a given destination the fastest,
+through dynamically generated cities. For now, it is half a level editor.
+Drag intersections around and connect them to each other with roads.
