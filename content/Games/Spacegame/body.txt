@@ -5,4 +5,5 @@ spacebar: shoot guided missile<br>
 T: target<br>
 tilde: drop mine<br>
 2: spawn enemy<br><br>
-<button id="start">Play!</button>
+<button id="start">Play!</button><br>
+Tip: this game looks best when you've died :)

@@ -1,2 +1,2 @@
 Spacegame is a quite generic space shooter, built to test an hypothesis about cooperation in game worlds.
-Though a great excersize in control and AI, I found a better way to do my thesis and thus this project was never really finished.
+Though a great excersize in control and AI, I found a better way to do my thesis and thus this project was never finished.
