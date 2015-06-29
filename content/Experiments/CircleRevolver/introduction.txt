@@ -1,0 +1,1 @@
+CircleRevolver started out as a drawing technique which quickly got too cumbersome so I created this algorithm, then added more parameters.
