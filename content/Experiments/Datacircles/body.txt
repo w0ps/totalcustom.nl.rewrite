@@ -18,13 +18,8 @@
 			<div id="miniCircular"></div>
 			<div class="synopsis">
 				<strong>Circular Diagram</strong>
-				<p>The circular diagram is meant to display data such as percentages, record position and pie charts.</p>
+				<p>The circular diagram is meant to display data such as percentages, record position and pie charts. Click to recreate</p>
 			</div>
-		</li>
-		<li>
-			<div id="miniSeed"></div>
-			<h6>Seed, flower & fruit of life</h6>
-			<span>One of the oldest algorithms known to man</span>
 		</li>
 	</ul>
 </section>
@@ -47,12 +42,4 @@
 	<figure name="circlemayhem" class="example">
 	<button id="initDemo">Start the mayhem!</button> - press esc to close
 
-</section>
-<section id="SFF">
-	<ul class="items">
-		<li>
-			<div id="sff" class="example"></div>
-			<span class="caption">An ancient algorithm</span>
-		</li>
-	</ul>
 </section>
