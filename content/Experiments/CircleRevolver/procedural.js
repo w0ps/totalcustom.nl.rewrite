@@ -119,8 +119,6 @@ CircleSpiral.prototype.addCircleArray = function(ctx){
       position: { x: lastCircleArray.position.x, y: lastCircleArray.position.y },
       radius: lastCircleArray.currentRadius + newCircleRadius
     });
-
-
     
     currentOnCircleArrayConstructionCircle = new IntelligentCircle({
       color: 'yellow',
@@ -207,41 +205,3 @@ ConcentricCircleArray.prototype.expand = function(amount){
 
   return newCircle;
 };
-
-$('#startCircleSpiral').on('click', initCircleSpiralDemo);
-
-function initCircleSpiralDemo(){
-  var $overlay = $('body').overlay();
-    
-    $overlay.css({background: 'black'});
-
-    var mySmartCanvas = new SmartCanvas({}, $overlay),
-      myCam = mySmartCanvas.camera;
-
-    var circleSpiral = new CircleSpiral({
-      startingRadius: 20,
-      additionalCircleRadius: 20,
-      layerRadius: 1,
-      limit: 200,
-      //newCircleScaleExponent: 1.2,
-      //newLayerScaleExponent: 0.998,
-      //randomizeCircleSize: 0.3,
-      //randomizeLayerRadius: 0.5,
-      drawConstructionCircles: true
-    });
-
-    mySmartCanvas.add( circleSpiral );
-
-    delay = 50;
-
-    setTimeout(function(){
-      //mySmartCanvas.camera.rotation += .001;
-      
-      mySmartCanvas.draw();
-      //if(!circleSpiral.constructed){
-        setTimeout(arguments.callee, delay);
-      //}
-    }, delay);
-}
-
-$(document).ready(initCircleSpiralDemo);
