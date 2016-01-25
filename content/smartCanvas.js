@@ -35,6 +35,8 @@ function SmartCanvas(options, $parentElement){
 	);
 
 	this.scale = 1 / devicePixelRatio;
+	this.yScale = options.yScale || 1;
+	this.xScale = options.xScale || 1;
 	
 	this.bufferSize = this.size.clone().multiplyScalar( 1 / this.scale );
 	
@@ -59,7 +61,7 @@ function SmartCanvas(options, $parentElement){
 	this.noClear = options.autoClear;
 	
 	if(!this.noDraw) this.draw();
-	
+
 	this.$canvas.on({
     mousemove: this.pointerEvent.bind(this, 'over'),
     click: this.pointerEvent.bind(this, 'click')
@@ -67,9 +69,11 @@ function SmartCanvas(options, $parentElement){
 }
 (function(){
   this.pointerEvent = function (event, e){
+  	if(event === 'click') console.log('pe', this.$canvas[0]);
     var camSpacePoint = this.toWorldSpace({x: e.offsetX, y: e.offsetY}),
         contents = this.contents,
         item, i;
+
     for(i in contents){
       item = contents[i];
       if(item[event] && typeof item[event] == 'function'){
@@ -78,7 +82,17 @@ function SmartCanvas(options, $parentElement){
     }
   };
 	this.add = function addItem(item){
-		this.contents.push(item);
+		var  tempNoDraw;
+		if(item.length){
+			tempNoDraw = this.noDraw;
+			this.noDraw = true;
+
+			item.forEach(this.add.bind(this));
+
+			this.noDraw = tempNoDraw;
+		} else {
+			this.contents.push(item);
+		}
 		if(!this.noDraw) this.draw();
 	};
 	this.clear = function clearCanvas(){
@@ -108,14 +122,16 @@ function SmartCanvas(options, $parentElement){
 		this.context.resetTransform();
 		
 		if(!this.noClear) this.clear();
-		
+
 		this.context.translate(this.centerBuffer.x, this.centerBuffer.y);
 		
 		this.context.rotate(this.camera.rotation);
+
+		this.context.scale(this.xScale, this.yScale);
 		
-		this.context.scale(this.camera.scale * this.scale, this.camera.scale * this.scale);
-		
-		this.context.translate(this.camera.position.x, this.camera.position.y);
+		this.context.scale( 1 / this.scale * ( this.camera.scale || 1 ), 1 / this.scale * ( this.camera.scale || 1 ) );
+
+		this.context.translate(-this.camera.position.x, -this.camera.position.y);
 		
 		
 		
@@ -139,7 +155,7 @@ function SmartCanvas(options, $parentElement){
 
 		camPoint.sub(this.centerView);
 
-		camPoint.multiplyScalar(this.scale);
+		//camPoint.multiplyScalar( 1 / this.scale );
 		
 		var sin = Math.sin(-this.camera.rotation),
 				cos = Math.cos(-this.camera.rotation);
@@ -149,10 +165,12 @@ function SmartCanvas(options, $parentElement){
 			camPoint.x * sin + camPoint.y * cos
 		);
 		
-		camPoint.multiplyScalar(1 / this.camera.scale);
+		if(this.camera.scale){
+			camPoint.multiplyScalar(1 / this.camera.scale);
+		}
 		
-		camPoint.sub(this.camera.position);
-		
+		camPoint.add(this.camera.position);
+
 		return camPoint;
 	};
 	this.toItemSpace = function toItemSpace(item, worldSpacePoint){
@@ -170,13 +188,4 @@ function SmartCanvas(options, $parentElement){
 		if (item.scale) itemSpacePoint.multiplyScalar(1 / (item.scale || 1));
 		return itemSpacePoint;
 	};
-	//this.startDrag = function(e){
-	//	var originalLocation = smartCanvas.toWorldSpace({x: e.offsetX, y: e.offsetY});
-	//	
-	//	//this.drag = 
-	//	this.$canvas.on({mousemove: function(e){
-	//		var currentLocation ;
-	//		this.camera.position;
-	//	}});
-	//};
 }).call(SmartCanvas.prototype);
