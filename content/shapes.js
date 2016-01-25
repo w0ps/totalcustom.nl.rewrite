@@ -12,6 +12,9 @@ Circle.prototype.draw = function(context){
   context.fill();
   context.restore();
 };
+Circle.prototype.inside = function(point){
+  return Math.pytha(this.x - point.x, this.y - point.y) <= this.radius;
+};
 
 function Arrow(color, size, x, y, orientation){
   this.color = color;
