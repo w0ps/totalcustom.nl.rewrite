@@ -69,7 +69,6 @@ function SmartCanvas(options, $parentElement){
 }
 (function(){
   this.pointerEvent = function (event, e){
-  	if(event === 'click') console.log('pe', this.$canvas[0]);
     var camSpacePoint = this.toWorldSpace({x: e.offsetX, y: e.offsetY}),
         contents = this.contents,
         item, i;
@@ -155,6 +154,7 @@ function SmartCanvas(options, $parentElement){
 
 		camPoint.sub(this.centerView);
 
+		// don't scale for retina scaling
 		//camPoint.multiplyScalar( 1 / this.scale );
 		
 		var sin = Math.sin(-this.camera.rotation),
