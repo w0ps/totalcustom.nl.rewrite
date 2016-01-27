@@ -13,11 +13,24 @@ function initDemo() {
       seg.width = Math.min(seg.radius, seg.width * 1.1);
     }
   });
+
+  myCam.rotationSpd = 0.002;
   
   var t = Math.random() * 1000000,
       lastTime = new Date().getTime();
-  var loop = setInterval(function(){
-    
+
+  tick();
+
+  var autoAddRestart, autoAddTime = 1000;
+  mySmartCanvas.$canvas.on('click', canvasClick);
+  
+  autoAddRestart = setInterval(autoCreateCircle, autoAddTime);
+
+  return;
+
+  function tick(){
+    if( window.stopped ) return;
+    console.log( 'tick' );
     var newTime =  new Date().getTime(),
         dt = newTime - lastTime,
         colorRYB = [
@@ -39,10 +52,11 @@ function initDemo() {
     mySmartCanvas.backgroundColor = 'rgba(' + [ colorRGB[0], colorRGB[1], colorRGB[2], .004 ].join(',') + ')';
     
     mySmartCanvas.step();
-  });
-  
-  var autoAddRestart, autoAddTime = 5000;
-  mySmartCanvas.$canvas.on('click', function(e){
+
+    window.requestAnimationFrame( tick );
+  }
+
+  function canvasClick(e){
     var coordinates = mySmartCanvas.toWorldSpace({x: e.offsetX, y: e.offsetY});
     
     var treshold = 150, newClosest = Infinity, theClosest,
@@ -64,10 +78,9 @@ function initDemo() {
     }
     clearInterval(autoAddRestart);
     autoAddRestart = setInterval(autoCreateCircle, autoAddTime);
-  });
-  
-  autoAddRestart = setInterval(autoCreateCircle, autoAddTime);
+  }
 }
+
 var stopAutoCreate = false;
 
 function autoCreateCircle() {
@@ -84,11 +97,11 @@ function autoCreateCircle() {
     i++;
   }
   if(!(closest < treshold)) createRandomCircle1(coordinates);
-  else{
-    var position = theClosest.position.clone(), rotationSpd = theClosest.rotationSpd;
-    mySmartCanvas.contents.splice(mySmartCanvas.contents.indexOf(theClosest), 1);
-    createRandomCircle1(position, rotationSpd);
-  }
+  // else{
+  //   var position = theClosest.position.clone(), rotationSpd = theClosest.rotationSpd;
+  //   mySmartCanvas.contents.splice(mySmartCanvas.contents.indexOf(theClosest), 1);
+  //   createRandomCircle1(position, rotationSpd);
+  // }
 }
 
 var newCircleCooldown;
