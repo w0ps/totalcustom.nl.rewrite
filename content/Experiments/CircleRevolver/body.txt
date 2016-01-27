@@ -2,25 +2,25 @@
 	<tr>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="15"
-				data-additional-circle-radius="15"
-				data-layer-radius="15"
+				data-starting-radius="7"
+				data-additional-circle-radius="7"
+				data-layer-radius="7"
 				data-limit="16"
 			></div>
 			Basic algorithm, mimics the drawing
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="30"
-				data-additional-circle-radius="30"
+				data-starting-radius="15"
+				data-additional-circle-radius="15"
 				data-limit="18"
 			></div>
 			Without adding layers it becomes a honeycomb
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="15"
-				data-additional-circle-radius="15"
+				data-starting-radius="7"
+				data-additional-circle-radius="7"
 				data-new-circle-scale-exponent="1.01"
 				data-limit="100"
 			></div>
@@ -28,8 +28,8 @@
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="25"
-				data-additional-circle-radius="25"
+				data-starting-radius="12"
+				data-additional-circle-radius="12"
 				data-new-circle-scale-exponent="0.995"
 				data-limit="300"
 			></div>
@@ -39,8 +39,8 @@
 	<tr>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="30"
-				data-additional-circle-radius="30"
+				data-starting-radius="15"
+				data-additional-circle-radius="15"
 				data-randomize-circle-size="0.2"
 				data-limit="100"
 			></div>
@@ -48,24 +48,24 @@
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="100"
-				data-additional-circle-radius="25"
+				data-starting-radius="50"
+				data-additional-circle-radius="12"
 				data-limit="70"
 			></div>
 			Bigger starting circle
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="20"
-				data-additional-circle-radius="30"
+				data-starting-radius="10"
+				data-additional-circle-radius="15"
 				data-limit="70"
 			></div>
 			Smaller starting circle
 		</td>
 		<td>
 			<div class="spiralversion"
-				data-starting-radius="50"
-				data-additional-circle-radius="25"
+				data-starting-radius="25"
+				data-additional-circle-radius="12"
 				data-new-circle-scale-exponent="1.01"
 				data-randomize-circle-size="0.2"
 				data-limit="70"
