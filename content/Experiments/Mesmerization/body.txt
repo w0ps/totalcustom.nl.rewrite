@@ -2,4 +2,4 @@ Behold:
 
 <div id="windowed-mesmerization"></div>
 
-<button id="initDemo">Start the mayhem!</button> - press esc to close
+<button id="initDemo">Start the mayhem!</button> - press esc to close, f to see the field
