@@ -1,0 +1,19 @@
+<div id="hangman-container">
+	<div id="hangman">
+		<div id="base">base</div>
+		<div id="pole">pole</div>
+		<div id="boom">boom</div>
+		<div id="support">support</div>
+		<div id="rope">rope</div>
+		<div id="head">head</div>
+		<div id="body">body</div>
+		<div id="left-arm">left arm</div>
+		<div id="right-arm">right arm</div>
+		<div id="left leg">left leg</div>
+		<div id="right leg">right leg</div>
+	</div>
+	<span id="your-guess"></span>
+	<input id="guess" />
+	<span id="already-guessed"></span>
+	<code></code>
+</div>
