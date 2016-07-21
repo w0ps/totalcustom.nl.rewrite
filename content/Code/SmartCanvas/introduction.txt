@@ -1,0 +1,1 @@
+SmartCanvas is a tiny canvas drawing engine, offering ease and interactivity

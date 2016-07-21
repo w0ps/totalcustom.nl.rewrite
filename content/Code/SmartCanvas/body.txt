@@ -1,0 +1,68 @@
+<table id="canvastable">
+	<tr>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="15"
+				data-additional-circle-radius="15"
+				data-layer-radius="15"
+				data-limit="16"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="30"
+				data-additional-circle-radius="30"
+				data-limit="18"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="15"
+				data-additional-circle-radius="15"
+				data-new-circle-scale-exponent="1.01"
+				data-limit="100"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="25"
+				data-additional-circle-radius="25"
+				data-new-circle-scale-exponent="0.995"
+				data-limit="300"
+			></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="30"
+				data-additional-circle-radius="30"
+				data-randomize-circle-size="0.2"
+				data-limit="100"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="100"
+				data-additional-circle-radius="25"
+				data-limit="70"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="20"
+				data-additional-circle-radius="30"
+				data-limit="70"
+			></div>
+		</td>
+		<td>
+			<div class="canvasdemo"
+				data-starting-radius="50"
+				data-additional-circle-radius="25"
+				data-new-circle-scale-exponent="1.01"
+				data-randomize-circle-size="0.2"
+				data-limit="70"
+			></div>
+		</td>
+	</tr>
+</table>
