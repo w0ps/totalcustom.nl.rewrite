@@ -1,1 +1,0 @@
-<div id="comperator"><h1>Comperator</h1><button onclick="playComperator()">Play Comperator!</button><br></div>
