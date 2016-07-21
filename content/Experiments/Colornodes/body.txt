@@ -1,3 +1,4 @@
 What happens if you make little circles of random colors,
 and then attach springs to every other circle, with lengths based upon their respective color difference?
 Semi-automatic color ordering does!
+Unfortunately the code got lost somewhere in disk space, I'm glad I made these screenshots :)
