@@ -1,4 +1,10 @@
-What happens if you make little circles of random colors,
-and then attach springs to every other circle, with lengths based upon their respective color difference?
-Semi-automatic color ordering does!
-Unfortunately the code got lost somewhere in disk space, I'm glad I made these screenshots :)
+In this experiment:
+
+- randomly colored dots!!!
+- they attach to every other randomly colored dot
+- the preferred length of their connection is determined by color difference
+- enabled different kind of trails
+- all rendered with canvas
+x source code lost only the screenshots left. Ah well.
+
+made with <a href="http://arborjs.org/">arbor.js</a> at passietijd @Q42
