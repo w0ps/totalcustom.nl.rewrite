@@ -95,10 +95,14 @@ function colorBufferToString(buffer){
 		item = workBuffer.shift();
 		color = item.color;
 		
-		parts.push('rgb(' + Math.floor(color[0]) + ',' + Math.floor(color[1]) + ',' + Math.floor(color[2]) + ') ' + (item.t * 100) + '%');
+		parts.push( colorToString( color ) + ' ' + (item.t * 100) + '%');
 	}
 
 	return parts.join(', ');
+}
+
+function colorToString( color ) {
+	return 'rgb(' + Math.floor(color[0]) + ',' + Math.floor(color[1]) + ',' + Math.floor(color[2]) + ')';
 }
 
 var gradientColors = [[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1]];
