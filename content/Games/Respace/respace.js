@@ -2,9 +2,9 @@ var SpaceGame = Game.extend({
   init: function(){
     this.entities = [];
     this.bullets = [];
-    
+
     this.players = [];
-    
+
     this.viewport = new Viewport();
 
     var game = this;
@@ -12,7 +12,7 @@ var SpaceGame = Game.extend({
       console.log('stopping');
       game.stop();
     });
-    
+
   },
   constants: {
     CIRCLE: 2 * Math.PI,
@@ -41,9 +41,11 @@ var SpaceGame = Game.extend({
     });
   },
   getShipById: function(id, callback){
-    for(var i in this.entities){
+    find: for(var i in this.entities){
       if(this.entities[i].id === id){
         callback(this.entities[i], i);
+
+        break find;
       }
     }
   },
@@ -58,16 +60,16 @@ var SpaceGame = Game.extend({
       this.entities[i].preTurn(dt);
       i++;
     }
-    
+
     //TURN
     i = 0;
     while (i < len) {
       this.entities[i].step(dt);
       i++;
     }
-    
+
     this.draw();
-    
+
     this.inAStep = false;
   },
   draw: function(){
@@ -99,7 +101,7 @@ AgentTypes.Entity = Object2D.extend({
     //
   },
   preTurn: function(t){
-    
+
   },
   step: function(t){
     Object2D.step.call(this, t);
@@ -136,13 +138,13 @@ AgentTypes.BasicShip = AgentTypes.Entity.extend({
   },
   granularity: 100,
   draw: function(context){
-    
+
   },
   step: function(t){
     this.control(t);
     this.engineTrail(t);
     this.damageSparks(t);
-    
+
     this.damage = Math.max(this.damage - (this.regeneration * t), 0);
     if(this.damage > this.health || this.destroyed){
       this.explode();
@@ -166,7 +168,7 @@ AgentTypes.Triangle = AgentTypes.BasicShip.extend({
 AgentTypes.Player = AgentTypes.Triangle.extend({
   init: function(){
     AgentTypes.Entity.prototype.init.apply(this, arguments);
-    
+
     this.keyListener = new KL.KeyListener();
     this.keyListener.addKey(new KL.Key({keyName: 'up', whilePressed: { run: function(){ console.log(new Date); }, interval: 25 } }));
 
