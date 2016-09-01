@@ -54,3 +54,9 @@ function getObjectFromString(string){
 	}
 	return object;
 }
+
+
+//interpolate
+function ipl(a, b, t){
+  return a * (1 - t) + b * t;
+}

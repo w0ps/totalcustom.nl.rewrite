@@ -1,0 +1,9 @@
+{
+  "javascripts": {
+    "unassigned": "date",
+    "assigned": [
+      "adaptive-gradient-buckets",
+      "demo"
+    ]
+  }
+}
