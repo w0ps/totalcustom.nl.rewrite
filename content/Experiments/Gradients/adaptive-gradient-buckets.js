@@ -39,12 +39,6 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
       }, { transitions: [], startPoint: workingGradient[ 0 ] } ).transitions;
 
   var pointsByDiff, point1, point2, relativeD1, transition, index, difference;
-  
-  function getDifference( point1, point2 ) {
-    return scalarDifferentiators.reduce( function getScalarDelta( total, scalarDifferentiator ) {
-      return total + scalarDifferentiator( point1, point2 );  
-    }, 0 );
-  }
 
   do {
 
@@ -104,21 +98,19 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
 
       index = workingGradient.indexOf( pointsByDiff.pop().point );
 
+      // debugger;
       // recompute difference between previous and next point
       point1 = workingGradient[ index - 1 ];
       point2 = workingGradient[ index + 1 ];
-      transition = transitions[ index ];
+      transition = transitions[ index - 1 ];
       transition.start = point1;
       transition.end = point2;
-
-      difference = getDifference( point1, point2 );
-
       transition.length = point2.pos - point1.pos;
-      transition.diff = difference;
-      transition.biasedLength = transition.length * difference;
+      transition.diff = getDifference( point1, point2 );
+      transition.biasedLength = transition.length * transition.diff;
 
       workingGradient.splice( index, 1 );
-      transitions.splice( index + 1, 1 );
+      transitions.splice( index, 1 );
     }
 
   } while ( workingGradient.length > maxBuckets );
@@ -186,4 +178,10 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
       }, [] );
 
   return buckets;
+
+  function getDifference( point1, point2 ) {
+    return scalarDifferentiators.reduce( function getScalarDelta( total, scalarDifferentiator ) {
+      return total + scalarDifferentiator( point1, point2 );  
+    }, 0 );
+  }
 }
