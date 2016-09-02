@@ -3,7 +3,7 @@ gradientContainer.setAttribute( 'style', 'width: 100%; height: 500px; border: 1p
 
 document.getElementById('Gradients').appendChild(gradientContainer);
 
-var stops = 8,
+var stops = 15,
     colors = 5,
     workBuffer = [],
     buffers = [
@@ -47,7 +47,7 @@ function createRandomColorBuffer( n, colorsAmt ) {
 
 function fillContainerWithBuffer( buffer ) {
   var colorStopsAmt = buffer.length,
-      maxMultiplier = 20;
+      maxMultiplier = 10;
 
   // too bad they're not compatible. todo
   var gradient = buffer.map( function( point ) {

@@ -63,8 +63,6 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
         point1 = workingGradient[ 0 ];
         point2 = workingGradient[ 1 ];
         relativeD1 = ( point1.pos || !point2.pos ) ? point1.pos / ( point1.pos + ( 1 - point2.pos ) ) : 0.5;
-        
-        console.log({maxBuckets: maxBuckets});
 
         if( maxBuckets === 2 ) {
           return [{
