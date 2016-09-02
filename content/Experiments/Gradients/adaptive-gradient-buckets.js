@@ -1,5 +1,4 @@
-// todo: max buckets 2 doesn't work
-// also, improve performance by replacing transitions during reduction instead of calculating all of them from scratch
+// todo: allow passing an object in the gradient points to store the scalar values
 function getBuckets( gradient, scalars, diffThreshold, max ) {
   var maxBuckets = Math.max( 1, max ),
       workingGradient = gradient.slice().sort( function comparePoints( a, b ) {
@@ -14,36 +13,40 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
           return weight * Math.abs( point1[ name ] - point2[ name ] );
         }
       } ),
-      transitions, pointsByDiff, point1, point2, relativeD1;
-  do {
-    // now establish all transitions between differing points
-    transitions = workingGradient.reduce( function observeChangedScalars( memo, point2, index, points ) {
-      
-      // a transition is the interaction between two control points, so ignore the first point
-      if( index ) {
-        var point1 = points[ index - 1 ],
-            difference = scalarDifferentiators.reduce( function getScalarDelta( total, scalarDifferentiator ) {
-          
-              return total + scalarDifferentiator( point1, point2 );  
-            }, 0 );
+  // now establish all transitions between differing points
+      transitions = workingGradient.reduce( function observeChangedScalars( memo, point2, index, points ) {
+    
+        // a transition is the interaction between two control points, so ignore the first point
+        if( index ) {
+          var point1 = points[ index - 1 ],
+              difference = getDifference( point1, point2 );
 
-        if( difference ) {
-          memo.transitions.push( {
-            start: memo.startPoint,
-            end: point2,
-            length: point2.pos - memo.startPoint.pos,
-            diff: difference,
-            biasedLength: ( point2.pos - memo.startPoint.pos ) * difference,
-            steps: 1,
-            index: index
-          } );
+          if( difference ) {
+            memo.transitions.push( {
+              start: memo.startPoint,
+              end: point2,
+              length: point2.pos - memo.startPoint.pos,
+              diff: difference,
+              biasedLength: ( point2.pos - memo.startPoint.pos ) * difference,
+              steps: 1
+            } );
 
-          memo.startPoint = point2;
+            memo.startPoint = point2;
+          }
         }
-      }
 
-      return memo;
-    }, { transitions: [], startPoint: workingGradient[ 0 ] } ).transitions;
+        return memo;
+      }, { transitions: [], startPoint: workingGradient[ 0 ] } ).transitions;
+
+  var pointsByDiff, point1, point2, relativeD1, transition, index, difference;
+  
+  function getDifference( point1, point2 ) {
+    return scalarDifferentiators.reduce( function getScalarDelta( total, scalarDifferentiator ) {
+      return total + scalarDifferentiator( point1, point2 );  
+    }, 0 );
+  }
+
+  do {
 
     // we need to cull the transitions in order of least difference
     pointsByDiff = ( workingGradient.length >= 3 ? workingGradient : [] ).slice( 1, workingGradient.length - 1 ).map( function createPointDiff( point, index, points ) {
@@ -98,7 +101,24 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
           } ];
         }
       }
-      workingGradient.splice( workingGradient.indexOf( pointsByDiff.pop().point ), 1 );
+
+      index = workingGradient.indexOf( pointsByDiff.pop().point );
+
+      // recompute difference between previous and next point
+      point1 = workingGradient[ index - 1 ];
+      point2 = workingGradient[ index + 1 ];
+      transition = transitions[ index ];
+      transition.start = point1;
+      transition.end = point2;
+
+      difference = getDifference( point1, point2 );
+
+      transition.length = point2.pos - point1.pos;
+      transition.diff = difference;
+      transition.biasedLength = transition.length * difference;
+
+      workingGradient.splice( index, 1 );
+      transitions.splice( index + 1, 1 );
     }
 
   } while ( workingGradient.length > maxBuckets );
