@@ -64,6 +64,8 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
         point2 = workingGradient[ 1 ];
         relativeD1 = ( point1.pos || !point2.pos ) ? point1.pos / ( point1.pos + ( 1 - point2.pos ) ) : 0.5;
         
+        console.log({maxBuckets: maxBuckets});
+
         if( maxBuckets === 2 ) {
           return [{
             start: 0,
@@ -89,7 +91,7 @@ function getBuckets( gradient, scalars, diffThreshold, max ) {
               return memo[ scalar.name || scalar ] = ipl(
                 point1[ scalar.name || scalar ],
                 point2[ scalar.name || scalar ],
-                relativeD1
+                1 - relativeD1
               ), memo;
             }, {} )
           } ];
