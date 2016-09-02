@@ -1,99 +1,188 @@
-var gradientContainer = document.createElement( 'div' );
-gradientContainer.setAttribute( 'style', 'width: 100%; height: 500px; border: 1px solid white; position: relative' );
+function GradientDemo( options ) {
+  var mixercontainer = document.getElementById( 'gradientmixercontainer' ),
+      gradientContainer = document.getElementById( 'true-gradientcontainer' ),
+      patchedGradientsContainer = document.getElementById( 'patchedgradientscontainer' ),
+      colorContainer = document.getElementById( 'current-colors' ),
+      stops = 10,
+      bucketMultiplier = 5,
+      colorsAmt = 10,
+      maxPoolSize = 7,
+      reverseSort = 1,
+      colorsToChooseFrom = [ getNiceColorRGB() ],
+      overlay, $overlay,
+      hidden = document.hidden || document.visibilityState !== 'visible';
 
-document.getElementById('Gradients').appendChild(gradientContainer);
+  updateColorsToChooseFrom();
 
-var stops = 15,
-    colors = 5,
-    colorsToChooseFrom = [],
-    workBuffer = [],
-    buffers = [
-      createRandomColorBuffer( stops, colors ),
-      createRandomColorBuffer( stops, colors )
-    ],
-    t = 0,
-    frequency = 5000, lastT = Date.now(),
-    stopGradientsDemo;
+  var workBuffer = [],
+      buffers = [ createRandomColorBuffer( stops - 2, colorsToChooseFrom ) ],
+      t = 0,
+      frequency = 1000, lastT = Date.now(),
+      stopGradientsDemo;
 
-setTimeout( function() {
-  var nt = Date.now(),
-      dt = nt - lastT;
+  updateColorsToChooseFrom();
   
-  lastT = nt;
+  buffers.push( createRandomColorBuffer( stops - 2, colorsToChooseFrom) );
 
-  t += dt / frequency;
+  installHandlers();
 
-  if( t > Math.PI ) {
-    while( t > Math.PI ) t -= Math.PI;
-    buffers.shift();
-    buffers.push( createRandomColorBuffer( stops, colors ) );
-  }
-
-  gradientContainer.textContent = '';
-  fillContainerWithBuffer( combineBuffers(buffers[0], buffers[1], (Math.cos(t) / -2 + 0.5), workBuffer) );
-
-  if( !stopGradientsDemo ) window.requestAnimationFrame( arguments.callee );
-} );
-
-function createRandomColorBuffer( n, colorsAmt ) {
-  //var colors = [];
+  setTimeout( step );
   
-  while( colorsToChooseFrom.length < colorsAmt ) colorsToChooseFrom.push( getNiceColorRGB() );  
+  // return;
 
-  var buffer = randomColorBufferA( { n: n, colors: colorsToChooseFrom } );
+  function updateColorsToChooseFrom() {
+    colorsToChooseFrom = colorsToChooseFrom.slice( Math.ceil( Math.random() * Math.random() * ( colorsToChooseFrom.length - 2 ) ) + 1 );
+    
+    var poolSize = Math.ceil( Math.random() * maxPoolSize ),
+        color,
+        colorPool;
 
-  colorsToChooseFrom = colorsToChooseFrom.slice( colorsToChooseFrom.length - Math.floor( Math.random() * ( colorsToChooseFrom.length - 1 ) ) );
+    while( colorsToChooseFrom.length < colorsAmt ) {
+      colorPool = [];
+      while( colorPool.length < poolSize ) {
+        color = getNiceColorRGB();
 
-  return buffer;
-}
+        colorPool.push( {
+          color: color,
+          diff: !colorsToChooseFrom.length ? 0 : colorsToChooseFrom.reduce( function addDifference( memo, oldColor ) {
+            return Math.min( memo, oldColor.reduce( function getDifference( total, channel, index ) {
+              return total + Math.abs( channel - color[ index ] );
+            }, 0 ) );
+          }, Infinity )
+        } );
+      }
+      
+      colorPool.sort( function( a, b ) {
+        return a.diff - b.diff * reverseSort;
+      } );
 
-function fillContainerWithBuffer( buffer ) {
-  var colorStopsAmt = buffer.length,
-      maxMultiplier = 10;
-
-  // too bad they're not compatible. todo
-  var gradient = buffer.map( function( point ) {
-    var color = point.color;
-    return {
-      pos: point.t,
-      r: color[ 0 ],
-      g: color[ 1 ],
-      b: color[ 2 ]
+      colorsToChooseFrom.push( colorPool[ 0 ].color );
     }
-  } );
 
-  var patchedGradients = [],
-      currentMultiplier = maxMultiplier,
-      currentReducing = colorStopsAmt,
-      scalars = [ 'r', 'g', 'b' ],
-      threshold = 0;
-
-  while( currentMultiplier ) {
-    patchedGradients.push( getBuckets( gradient, scalars, 0, Math.floor( colorStopsAmt * currentMultiplier-- ) ) );
-  }
-  while( --currentReducing >= 1 ) {
-    patchedGradients.push( getBuckets( gradient, scalars, 0, currentReducing ) );
-  }
-
-  var trueGradientElement = document.createElement( 'div' ),
-      height = 100 / ( patchedGradients.length + 1 ) + '%';
-  trueGradientElement.setAttribute( 'style', 'height: ' + height + '; background: linear-gradient(to right, ' + colorBufferToString( buffer ) );
-  gradientContainer.appendChild( trueGradientElement );
-
-  patchedGradients.forEach( function insertPatchedGradient( patchedGradient ) {
-    var patchedGradientElement = document.createElement( 'div' );
-    patchedGradientElement.setAttribute( 'style', 'width: 100%; height: ' + height + '; position: relative;' );
-    gradientContainer.appendChild( patchedGradientElement );
-
-    patchedGradient.forEach( function insertPatch( patch ) {
-      var patchElement = document.createElement( 'div' ),
-          color = patch.values;
-      patchElement.setAttribute( 'style', 'height: 100%; position: absolute; left: ' + ( patch.start * 100 + '%' ) + '; right: ' + ( 100 - patch.end * 100 + '%' ) + '; background-color: ' + colorToString( [ color.r, color.g, color.b ] ) );
-      patchedGradientElement.appendChild( patchElement );
+    colorContainer.textContent = '';
+    colorsToChooseFrom.forEach( function( color ) {
+      var swatch = document.createElement( 'div' );
+      swatch.setAttribute( 'style', 'float: left; width: ' + (100 / colorsAmt + '%') + '; height: 100%; background-color: ' + colorToString( color ) );
+      colorContainer.appendChild( swatch );
     } );
-  } );
+  }
+
+  function step() {
+    if( stopGradientsDemo ) {
+      return;
+    }
+
+    var nt = Date.now(),
+        dt = nt - lastT;
+    
+    lastT = nt;
+
+    t += dt / frequency;
+
+    if( t > Math.PI ) {
+      updateColorsToChooseFrom();
+      while( t > Math.PI ) t -= Math.PI;
+      buffers.shift();
+      buffers.push( createRandomColorBuffer( stops - 2, colorsToChooseFrom ) );
+    }
+
+    patchedGradientsContainer.textContent = '';
+    fillContainerWithBuffer( combineBuffers(buffers[0], buffers[1], (Math.cos(t) / -2 + 0.5), workBuffer) );
+
+    window.requestAnimationFrame( arguments.callee );
+  }
+
+  function createRandomColorBuffer( n ) {
+    return randomColorBufferA( { n: n, colors: colorsToChooseFrom, forceStartStop: true, forceEndStop: true, loopAround: false } );
+  }
+
+  function fillContainerWithBuffer( buffer ) {
+    var colorStopsAmt = buffer.length,
+        buckets = bucketMultiplier * buffer.length + 1;
+
+    // too bad they're not compatible. todo
+    var gradient = buffer.map( function( point ) {
+      var color = point.color;
+      return {
+        t: point.t,
+        r: color[ 0 ],
+        g: color[ 1 ],
+        b: color[ 2 ]
+      }
+    } );
+
+    var patchedGradients = [],
+        scalars = [ 'r', 'g', 'b' ],
+        threshold = 0;
+
+    while( --buckets >= 1 ) {
+      patchedGradients.push( getBuckets( gradient, scalars, threshold, buckets ) );
+    }
+
+    var height = 100 / ( patchedGradients.length ) + '%';
+
+    gradientContainer.style.background = 'linear-gradient(to right, ' + colorBufferToString( buffer );
+
+    ( !overlay ? patchedGradients : patchedGradients.reverse() ).forEach( function insertPatchedGradient( patchedGradient ) {
+      var patchedGradientElement = document.createElement( 'div' );
+      patchedGradientElement.className = 'patchedGradient';
+      patchedGradientElement.style.height = height;
+      patchedGradientElement.dataset.bucketcount = (10 / patchedGradient.length).toFixed(3);
+      patchedGradientsContainer.appendChild( patchedGradientElement );
+
+      patchedGradient.forEach( function insertPatch( patch ) {
+        var patchElement = document.createElement( 'div' ),
+            color = patch.values;
+        patchElement.setAttribute( 'style', [
+          'left: ' + ( patch.start * 100 + '%' ),
+          'right: ' + ( 100 - patch.end * 100 + '%' ),
+          'background-color: ' + colorToString( [ color.r, color.g, color.b ] )
+        ].join('; ') );
+        patchedGradientElement.appendChild( patchElement );
+      } );
+    } );
+  }
+
+  function installHandlers() {
+    $( document.body ).one( 'pageTransitionBegin', destroyDemo );
+    patchedGradientsContainer.addEventListener( 'click', toggleZoom );
+  }
+
+
+  function pauseGradientDemo() {
+    stopGradientsDemo = true;
+    console.log('paused', Date.now());
+  }
+
+  function resumeGradientDemo() {
+    console.log('resumed', Date.now());
+    stopGradientsDemo = false;
+    step();
+  }
+
+  function toggleZoom() {
+    if( !overlay ) {
+      $overlay = $(document.body).overlay().on( 'remove', function restorePatchedGradientContainer() {
+        mixercontainer.insertBefore(patchedGradientsContainer, document.getElementById( 'controls' ) );
+        overlay = null;
+      } );
+      overlay = $overlay[ 0 ];
+
+      overlay.appendChild(patchedGradientsContainer);
+    
+    } else $overlay.trigger( 'remove' );
+  }
+
+  function destroyDemo() {
+    pauseGradientDemo();
+    delete window.gradientsDemo;
+    destroyDemo = function(){};
+    pauseGradientDemo = function(){};
+  }
 }
 
-$(document.body).one('pageTransitionBegin', function() {
-  stopGradientsDemo = true;
+$( document.body ).on( 'pageTransitionEnd', function(e){
+  if( location.pathname === '/Experiments/Gradients') window.gradientsDemo = new GradientDemo();
 } );
+
+

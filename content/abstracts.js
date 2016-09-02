@@ -1,3 +1,8 @@
+// interpolate between scalar a and b with theta [0-1]
+function ipl(a, b, t){
+  return a * (1 - t) + b * t;
+}
+
 function assign(){
   for(var i in arguments){
     var pair = arguments[i];
@@ -53,10 +58,4 @@ function getObjectFromString(string){
 		return false;
 	}
 	return object;
-}
-
-
-//interpolate
-function ipl(a, b, t){
-  return a * (1 - t) + b * t;
 }

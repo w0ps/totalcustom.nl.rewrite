@@ -1,0 +1,14 @@
+<h2>Adaptive gradient interpolation</h2>
+<div id="gradientmixercontainer"><div id="true-gradientcontainer"></div><div id="patchedgradientscontainer"></div><div id="controls"><div id="current-colors"></div><div id="color-pool"></div></div></div>
+Again I've decided to reinvent the wheel, in order to add color to the <a href="/Experiments/Mesmerization">Mesmerization experiment</a>.
+I wanted to apply gradient coloring to the flowing particles, but the problem would be that for every particle to have a distinct color, I would have to draw them all separately, which would be a huge drain on cpu power because it is much faster to draw them all together in one path. Then the idea of generating the swatches came to mind. But how to go about that?
+
+A gradient is a set of color stops on a ruler, going from 0 to 1 theta or t. Between the color stops are the transitions, they transition both in t and color, so they have a length and a difference value in relation with their neighbors. My first idea, as read in my sketch, was to calculate for each segment its 'biased' length; length times difference, and then write some complicated logic to convert regularly distributed points along the biased coordinates to the original theta coordinates, but it seemed too convoluted, and I might lose a lot of detail when some control points would be close together.
+
+Because the whole thing is written to be a performance improvement for rendering stuff I created the maxBuckets option. It limits the amount of divisions to create.
+It sprung to mind emmediately. The most interesting case is where you want less buckets than you have color stops. You never know where a gradient input comes from, so it's a good idea to be able to deal with it for simplification. 
+
+
+<figure name="gradients" style="width: 500px; height: 375px">
+  <figcaption>the sketch</figcaption>
+</figure>

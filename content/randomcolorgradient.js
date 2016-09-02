@@ -19,7 +19,7 @@ function randomColorBufferA(options){
 	startEndColor = combineColorsRandomly(colors);
 
 	if( options.forceStartStop ) buffer.unshift({t: 0, color: startEndColor});
-	if( options.forceEndStop ) buffer.push({t: 1, color: startEndColor});
+	if( options.forceEndStop ) buffer.push( { t: 1, color: options.loopAround ? startEndColor : combineColorsRandomly( colors ) } );
 	
 	return buffer;
 }
@@ -124,7 +124,7 @@ function slowlyChangingBackgroundGradient(options){
 		timeTreshold = 1;
 
 	buffers.push(
-		bufferToRGB(randomColorBufferA( { n: n, colors: colors, forceStartStop: true, forceEndStop: true } ) )
+		bufferToRGB(randomColorBufferA( { n: n, colors: colors, forceStartStop: true, forceEndStop: true, loopAround: true } ) )
 	);
 
 	$(document.body).css({
@@ -132,7 +132,7 @@ function slowlyChangingBackgroundGradient(options){
 	});
 
 	$(document).on('pageTransitionBegin', function transitionGradient(){
-		buffers.push(bufferToRGB(randomColorBufferA({n: n, colors: colors})));
+		buffers.push(bufferToRGB(randomColorBufferA({n: n, colors: colors, forceStartStop: true, forceEndStop: true, loopAround: true })));
 		(function step(){
 			$(document.body).css({
 				background: 'linear-gradient(to right, ' + colorBufferToString(
