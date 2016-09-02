@@ -18,8 +18,8 @@ function randomColorBufferA(options){
 
 	startEndColor = combineColorsRandomly(colors);
 
-	buffer.unshift({t: 0, color: startEndColor});
-	buffer.push({t: 1, color: startEndColor});
+	if( options.forceStartStop ) buffer.unshift({t: 0, color: startEndColor});
+	if( options.forceEndStop ) buffer.push({t: 1, color: startEndColor});
 	
 	return buffer;
 }
@@ -124,7 +124,7 @@ function slowlyChangingBackgroundGradient(options){
 		timeTreshold = 1;
 
 	buffers.push(
-		bufferToRGB(randomColorBufferA({n: n, colors: colors}))
+		bufferToRGB(randomColorBufferA( { n: n, colors: colors, forceStartStop: true, forceEndStop: true } ) )
 	);
 
 	$(document.body).css({

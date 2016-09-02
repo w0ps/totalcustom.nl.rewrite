@@ -41,10 +41,8 @@ function createRandomColorBuffer( n, colorsAmt ) {
   while( colorsToChooseFrom.length < colorsAmt ) colorsToChooseFrom.push( getNiceColorRGB() );  
 
   var buffer = randomColorBufferA( { n: n, colors: colorsToChooseFrom } );
-  buffer.pop(); // remove edge points, todo modify buffer code so it doesn't always create edge points
-  buffer.shift();
 
-  colorsToChooseFrom.shift();
+  colorsToChooseFrom = colorsToChooseFrom.slice( colorsToChooseFrom.length - Math.floor( Math.random() * ( colorsToChooseFrom.length - 1 ) ) );
 
   return buffer;
 }
