@@ -5,13 +5,15 @@ document.getElementById('Gradients').appendChild(gradientContainer);
 
 var stops = 15,
     colors = 5,
+    colorsToChooseFrom = [],
     workBuffer = [],
     buffers = [
       createRandomColorBuffer( stops, colors ),
       createRandomColorBuffer( stops, colors )
     ],
     t = 0,
-    frequency = 5000, lastT = Date.now();
+    frequency = 5000, lastT = Date.now(),
+    stopGradientsDemo;
 
 setTimeout( function() {
   var nt = Date.now(),
@@ -30,17 +32,19 @@ setTimeout( function() {
   gradientContainer.textContent = '';
   fillContainerWithBuffer( combineBuffers(buffers[0], buffers[1], (Math.cos(t) / -2 + 0.5), workBuffer) );
 
-  window.requestAnimationFrame( arguments.callee );
+  if( !stopGradientsDemo ) window.requestAnimationFrame( arguments.callee );
 } );
 
 function createRandomColorBuffer( n, colorsAmt ) {
-  var colors = [];
+  //var colors = [];
   
-  while( colors.length < colorsAmt ) colors.push( getNiceColorRGB() );  
+  while( colorsToChooseFrom.length < colorsAmt ) colorsToChooseFrom.push( getNiceColorRGB() );  
 
-  var buffer = randomColorBufferA( { n: n, colors: colors } );
-  buffer.pop();
+  var buffer = randomColorBufferA( { n: n, colors: colorsToChooseFrom } );
+  buffer.pop(); // remove edge points, todo modify buffer code so it doesn't always create edge points
   buffer.shift();
+
+  colorsToChooseFrom.shift();
 
   return buffer;
 }
@@ -91,3 +95,7 @@ function fillContainerWithBuffer( buffer ) {
     } );
   } );
 }
+
+$(document.body).one('pageTransitionBegin', function() {
+  stopGradientsDemo = true;
+} );
