@@ -36,6 +36,54 @@ function MotionDisplay(options){
 		return this.renderField();
 	}
 
+	// var buffer = randomColorBufferA( { n: 10, colors: [getNiceColorRGB(), getNiceColorRGB(), getNiceColorRGB()], forceStartStop: true, forceEndStop: true });
+  var gradient = [
+  			{
+  				t: 0,
+  				r: 0,
+  				g: 0,
+  				b: 255
+  			}, {
+  				t: 0.5,
+  				r: 0,
+  				g: 255,
+  				b: 0
+  			}, {
+  				t: 1,
+  				r: 255,
+  				g: 0,
+  				b: 0
+  			}
+		  ];
+	//var gradient = buffer.map( function( point ) {
+  //   var color = point.color;
+  //   return {
+  //     t: point.t,
+  //     r: color[ 0 ],
+  //     g: color[ 1 ],
+  //     b: color[ 2 ]
+  //   }
+  // } );
+  var buckets = getBuckets( gradient, [ 'r', 'g', 'b' ], 0, 6, function( bucket ) {
+  	bucket.children = [];
+  	bucket.clear = function() {
+  		bucket.children = [];
+  	};
+  	var color = bucket.values;
+  	bucket.color = colorToString( [ color.r, color.g, color.b ] );
+  } );
+  
+  var bucketTree = new BucketTree( buckets );
+
+  this.getLeaf = function getLeaf( t ) {
+  	return bucketTree.getLeaf( t );
+  }
+
+  this.leafs = bucketTree.getLeafs([]).reverse();
+
+  console.log(bucketTree);
+  // debugger;
+
 	this.createParticles();
 
 	document.addEventListener('visibilitychange', function(e){
@@ -94,25 +142,50 @@ function MotionDisplay(options){
 			return this.renderField();
 		}
 
+		ctx.globalCompositeOperation = 'source-over';
+
 		ctx.fillStyle = this.background;
 		ctx.fillRect(0, 0, this.grid.width, this.grid.height);
+
+		ctx.globalCompositeOperation = 'lighter';
 
 		var i = 0,
 				particles = this.particles,
 				l = particles.length,
-				p;
-
-		ctx.beginPath();
+				maxSpd = defaults.motionDisplay.particleSpdFactor,// / defaults.motionDisplay.particleMaxSpeed,
+				spd,
+				p,
+				bucketRenderer;
 
 		while(i < l){
 			p = particles[i++];
 			p.step(grid);
 
-			ctx.moveTo(p.x, p.y);
-			ctx.lineTo(p.x - p.dx, p.y - p.dy);
+			spd = Math.sqrt( Math.pow( p.dx, 2) + Math.pow( p.dy, 2 ) );
+			if( spd !== spd) debugger;//continue; //sometimes they get NaN
+
+			this.getLeaf( spd / maxSpd ).children.push( p );
 		}
 
-		ctx.stroke();
+		bucketRenderer = function drawParticlesInBucket( particles, bucket ) {
+			if (!bucket.children.length ) return;
+			
+			ctx.beginPath();
+			ctx.strokeStyle = bucket.color;
+
+			i = 0;
+			while( i < l ) {
+				p = particles[i++];
+				ctx.moveTo( p.x, p.y );
+				ctx.lineTo( p.x - p.dx, p.y - p.dy );
+			}
+
+			ctx.stroke();
+
+			bucket.clear();
+		}.bind(null, particles );
+
+		this.leafs.forEach( bucketRenderer );
 	};
 	this.renderField = function(){
 		var pt = Date.now(),

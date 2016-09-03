@@ -59,3 +59,48 @@ function getObjectFromString(string){
 	}
 	return object;
 }
+
+function LogSlider(options) {
+  options = options || {};
+  this.minpos = options.minpos || 0;
+  this.maxpos = options.maxpos || 100;
+  this.minlval = Math.log(options.minval || 1);
+  this.maxlval = Math.log(options.maxval || 100000);
+  this.scale = ( this.maxlval - this.minlval ) / ( this.maxpos - this.minpos );
+  this.onChange = options.onChange;
+
+  var control = this,
+      slider = this.slider = options.slider,
+      input = this.input = options.input;
+
+  slider.addEventListener( 'change', function() {
+    var val = control.value( +slider.value );
+    input.value = val.toFixed(0);
+    control.onChange && control.onChange( val );
+  } );
+
+  input.addEventListener( 'keyup', function() {
+      var val = +input.value,
+          pos = control.position( val );
+
+      if( !val || val < 0 ) return;
+
+      slider.value = pos;
+      control.onChange && control.onChange( val );
+  } );
+  
+  slider.value = this.position( input.value = options.initVal );
+}
+
+LogSlider.prototype = {
+  // Calculate value from a slider position
+  value: function( position ) {
+    return Math.exp( ( position - this.minpos ) * this.scale + this.minlval );
+  },
+  // Calculate slider position from a value
+  position: function( value ) {
+    return this.minpos + ( Math.log(value ) - this.minlval ) / this.scale;
+  }
+};
+
+

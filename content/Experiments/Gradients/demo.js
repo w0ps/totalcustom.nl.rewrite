@@ -3,6 +3,18 @@ function GradientDemo( options ) {
       gradientContainer = document.getElementById( 'true-gradientcontainer' ),
       patchedGradientsContainer = document.getElementById( 'patchedgradientscontainer' ),
       colorContainer = document.getElementById( 'current-colors' ),
+      frequency = 1000,
+      freqSlider = new LogSlider( {
+        maxpos: 100,
+        minval: 100,
+        maxval: 30000,
+        initVal: 1000,
+        slider: document.getElementById( 'freq' ),
+        input: document.getElementById( 'freq-numerical' ),
+        onChange: function( value ) {
+          frequency = value;
+        }
+      } ),
       stops = 10,
       bucketMultiplier = 5,
       colorsAmt = 10,
@@ -17,7 +29,10 @@ function GradientDemo( options ) {
   var workBuffer = [],
       buffers = [ createRandomColorBuffer( stops - 2, colorsToChooseFrom ) ],
       t = 0,
-      frequency = 1000, lastT = Date.now(),
+      frequency = 1000,
+      lastT = Date.now(),
+      offset = 0,
+      offsetShiftFrequency = 10000,
       stopGradientsDemo;
 
   updateColorsToChooseFrom();
@@ -78,6 +93,7 @@ function GradientDemo( options ) {
     lastT = nt;
 
     t += dt / frequency;
+    offset += dt / offsetShiftFrequency;
 
     if( t > Math.PI ) {
       updateColorsToChooseFrom();
@@ -87,7 +103,7 @@ function GradientDemo( options ) {
     }
 
     patchedGradientsContainer.textContent = '';
-    fillContainerWithBuffer( combineBuffers(buffers[0], buffers[1], (Math.cos(t) / -2 + 0.5), workBuffer) );
+    fillContainerWithBuffer( combineBuffers( buffers[ 0 ], buffers[ 1 ], ( Math.cos( t ) / -2 + 0.5 ), workBuffer ), t );
 
     window.requestAnimationFrame( arguments.callee );
   }
@@ -96,7 +112,7 @@ function GradientDemo( options ) {
     return randomColorBufferA( { n: n, colors: colorsToChooseFrom, forceStartStop: true, forceEndStop: true, loopAround: false } );
   }
 
-  function fillContainerWithBuffer( buffer ) {
+  function fillContainerWithBuffer( buffer, t ) {
     var colorStopsAmt = buffer.length,
         buckets = bucketMultiplier * buffer.length + 1;
 
@@ -115,7 +131,9 @@ function GradientDemo( options ) {
         scalars = [ 'r', 'g', 'b' ],
         threshold = 0;
 
-    while( --buckets >= 1 ) {
+    if( 0 && overlay ) while( --buckets >= 1 ) {
+      patchedGradients.push( rotatePatchedGradient( getBuckets( gradient, scalars, threshold, buckets ), offset ) );
+    } else while( --buckets >= 1 ) {
       patchedGradients.push( getBuckets( gradient, scalars, threshold, buckets ) );
     }
 
@@ -185,4 +203,38 @@ $( document.body ).on( 'pageTransitionEnd', function(e){
   if( location.pathname === '/Experiments/Gradients') window.gradientsDemo = new GradientDemo();
 } );
 
+// it doesn't rotate back, if you want to rotate it back pass it 1 - t
+function rotatePatchedGradient( swatches, t ) {
+  var newSwatch;
+
+  swatches.forEach( function rotateSwatch( swatch ) {
+    swatch.start += t;
+    swatch.end += t;
+    
+    while( swatch.start > 1 ) {
+      --swatch.start;
+      --swatch.end;
+      --swatch.t;
+    }
+
+    if( swatch.end > 1 ) {
+      newSwatch = {
+        t: swatch.t,
+        start: 0,
+        end: swatch.end - 1,
+        values: swatch.values
+      };
+
+      swatch.end = 1;
+    }
+  } );
+
+  if( newSwatch ) {
+    swatches.push( newSwatch );
+  } else {
+    debugger;
+  }
+
+  return swatches;
+}
 
