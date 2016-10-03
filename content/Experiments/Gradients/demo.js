@@ -18,10 +18,10 @@ function GradientDemo( options ) {
         }
       } ),
       stops = 7,
-      bucketMultiplier = 5,
+      bucketMultiplier = 6,
       colorsAmt = 10,
+      ditherTotal = 30,
       maxPoolSize = 7,
-      reverseSort = 1,
       nextColorPool = [],
       colorsToChooseFrom = [],
       overlay, $overlay,
@@ -83,7 +83,7 @@ function GradientDemo( options ) {
     }
     
     colorPool.sort( function( a, b ) {
-      return a.diff - b.diff * reverseSort;
+      return a.diff - b.diff;
     } );
 
     return Math.random() < invertChance ? colorPool[ 0 ].color : colorPool[ colorPool.length - 1 ].color;
@@ -136,12 +136,26 @@ function GradientDemo( options ) {
 
     var patchedGradients = [],
         scalars = [ 'r', 'g', 'b' ],
-        threshold = 0;
+        threshold = 0,
+        normalBuckets, ditheredBuckets;
 
     if( sideScrolling && overlay ) while( --buckets >= 1 ) {
       patchedGradients.push( rotatePatchedGradient( getBuckets( gradient, scalars, threshold, buckets ), offset ) );
     } else while( --buckets >= 1 ) {
-      patchedGradients.push( getBuckets( gradient, scalars, threshold, buckets ) );
+      if( buckets > ditherTotal || buckets < 2 ) {
+        patchedGradients.push( getBuckets( gradient, scalars, threshold, buckets ) );
+      } else {
+        normalBuckets = getBuckets( gradient, scalars, threshold, buckets );
+        ditheredBuckets = normalBuckets.reduce( function( memo, bucket, index ) {
+          if( index ) [].push.apply( memo.newBuckets, ditheredGradient( memo.prev.values, bucket.values, Math.ceil( ditherTotal * ( bucket.t - memo.prev.t ) ), memo.prev.t, bucket.t ) );
+
+          memo.prev = bucket;
+
+          return memo;
+        }, { prev: null, newBuckets: [] } ).newBuckets;
+
+        patchedGradients.push( ditheredBuckets );
+      }
     }
 
     var height = ( overlay ? 50 : 100 ) / ( patchedGradients.length ) + '%';
@@ -248,6 +262,36 @@ function rotatePatchedGradient( swatches, t ) {
     swatches.push( newSwatch );
   } else {
     debugger;
+  }
+
+  return swatches;
+}
+
+function ditheredGradient( state1, state2, n, domainStart, domainEnd ){
+  var swatches = [],
+      pairWidth = ( ( domainEnd || 1 ) - ( domainStart || 0 ) ) / n,
+      swatchUnit = pairWidth / ( n + 1 ),
+      i = 0,
+      pairStart,
+      boundary;
+
+  domainStart = domainStart || 0;
+
+  while( i < n ) {
+    pairStart = domainStart + pairWidth * i;
+    boundary = pairStart + pairWidth - swatchUnit * ( i + 1 );
+    
+    swatches.push( {
+      start: pairStart,
+      end: boundary,
+      values: state1
+    }, {
+      start: boundary,
+      end: pairStart + pairWidth,
+      values: state2
+    } );
+
+    ++i;
   }
 
   return swatches;
