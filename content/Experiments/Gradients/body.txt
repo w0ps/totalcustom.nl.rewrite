@@ -1,5 +1,5 @@
 <h2>Adaptive gradient interpolation</h2>
-<div id="gradientmixercontainer"><div id="true-gradientcontainer"></div><div id="patchedgradientscontainer"></div><div id="controls"><div id="current-colors"></div><div id="color-pool"></div><label>frequency<input id="freq-numerical"><input type="range" id="freq" min="0" value="100" max="100"></label></div></div>
+<div id="gradientmixercontainer"><div id="true-gradientcontainer"></div><div id="patchedgradientscontainer"></div><div id="controls"><div id="current-colors"></div><div id="color-pool"></div><label>frequency<input id="freq-numerical"><input type="range" id="freq" min="0" value="100" max="100" /></label><br><label>dither<input type="checkbox" id="dither" /></label></div></div>
 
 Definitions:
 gradient: color or other value changing over distance as defined by -

@@ -5,6 +5,7 @@ function GradientDemo( options ) {
       colorContainer = document.getElementById( 'current-colors' ),
       sideScrolling = false,
       swapped = false,
+      dither = false,
       frequency = 1000,
       freqSlider = new LogSlider( {
         maxpos: 100,
@@ -18,7 +19,7 @@ function GradientDemo( options ) {
         }
       } ),
       stops = 7,
-      bucketMultiplier = 6,
+      bucketMultiplier =  7,
       colorsAmt = 10,
       ditherTotal = 30,
       maxPoolSize = 7,
@@ -138,24 +139,23 @@ function GradientDemo( options ) {
         scalars = [ 'r', 'g', 'b' ],
         threshold = 0,
         normalBuckets, ditheredBuckets;
-
-    if( sideScrolling && overlay ) while( --buckets >= 1 ) {
-      patchedGradients.push( rotatePatchedGradient( getBuckets( gradient, scalars, threshold, buckets ), offset ) );
-    } else while( --buckets >= 1 ) {
-      if( buckets > ditherTotal || buckets < 2 ) {
+    if( !dither ) {
+      if( sideScrolling && overlay ) while( --buckets >= 1 ) {
+        patchedGradients.push( rotatePatchedGradient( getBuckets( gradient, scalars, threshold, buckets ), offset ) );
+      } else while( --buckets >= 1 ) {
         patchedGradients.push( getBuckets( gradient, scalars, threshold, buckets ) );
-      } else {
-        normalBuckets = getBuckets( gradient, scalars, threshold, buckets );
-        ditheredBuckets = normalBuckets.reduce( function( memo, bucket, index ) {
-          if( index ) [].push.apply( memo.newBuckets, ditheredGradient( memo.prev.values, bucket.values, Math.ceil( ditherTotal * ( bucket.t - memo.prev.t ) ), memo.prev.t, bucket.t ) );
-
-          memo.prev = bucket;
-
-          return memo;
-        }, { prev: null, newBuckets: [] } ).newBuckets;
-
-        patchedGradients.push( ditheredBuckets );
       }
+    } else while(--buckets >= 1 ) {
+      normalBuckets = getBuckets( gradient, scalars, threshold, stops );
+      ditheredBuckets = normalBuckets.reduce( function( memo, bucket, index ) {
+        if( index ) [].push.apply( memo.newBuckets, ditheredGradient( memo.prev.values, bucket.values, Math.ceil( buckets * ( bucket.t - memo.prev.t ) ), memo.prev.t, bucket.t ) );
+
+        memo.prev = bucket;
+
+        return memo;
+      }, { prev: null, newBuckets: [] } ).newBuckets;
+
+      patchedGradients.push( ditheredBuckets );
     }
 
     var height = ( overlay ? 50 : 100 ) / ( patchedGradients.length ) + '%';
@@ -180,6 +180,7 @@ function GradientDemo( options ) {
       patchedGradient.forEach( function insertPatch( patch ) {
         var patchElement = document.createElement( 'div' ),
             color = patch.values;
+
         patchElement.setAttribute( 'style', [
           'left: ' + ( patch.start * 100 + '%' ),
           'right: ' + ( 100 - patch.end * 100 + '%' ),
@@ -192,6 +193,7 @@ function GradientDemo( options ) {
 
   function installHandlers() {
     $( document.body ).one( 'pageTransitionBegin', destroyDemo );
+    document.querySelector( 'input#dither' ).addEventListener( 'click', toggleDither );
     patchedGradientsContainer.addEventListener( 'click', toggleZoom );
   }
 
@@ -205,6 +207,10 @@ function GradientDemo( options ) {
     console.log('resumed', Date.now());
     stopGradientsDemo = false;
     step();
+  }
+
+  function toggleDither() {
+    dither = !dither;
   }
 
   function toggleZoom() {
