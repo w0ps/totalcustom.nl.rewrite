@@ -3,6 +3,7 @@
 		"unassigned": "date",
 		"assigned": [
 			"defaults",
+			"functions",
 			"constants",
 			"fieldsInfo",
 			"particle",
