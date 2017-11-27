@@ -1,0 +1,5 @@
+Behold:
+
+<div id="minifield"></div>
+<br>
+<button id="initDemo">Start the mayhem!</button> enters fullscreen - press esc to close, f to see the field

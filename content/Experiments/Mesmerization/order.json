@@ -1,0 +1,16 @@
+{
+	"javascripts": {
+		"unassigned": "date",
+		"assigned": [
+			"defaults",
+			"functions",
+			"constants",
+			"fieldsInfo",
+			"particle",
+			"grid",
+			"MotionDisplay",
+			"fieldsLoader",
+			"initMotionDisplay"
+		]
+	}
+}
