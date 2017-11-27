@@ -1,0 +1,50 @@
+.figure[name=gradients] {
+  display: block;
+  margin: 0 auto;
+}
+
+#true-gradientcontainer {
+  height: 60px;
+  margin: 25px 0;
+}
+
+#patchedgradientscontainer {
+  width: 100%;
+  position: relative;
+  cursor: zoom;
+}
+
+article #patchedgradientscontainer {
+  height: 500px;
+  cursor: pointer;
+}
+
+[data-role=overlay] #patchedgradientscontainer {
+  height: 100%;
+  cursor: none;
+}
+
+.patchedGradient {
+  box-sizing: border-box;
+  position: relative;
+}
+
+.patchedGradient div {
+  position: absolute;
+  height: 100%;
+}
+
+.patchedGradient::after {
+  content: attr(data-bucketcount);
+  position: absolute;
+  font-family: arial;
+  font-size: 10px;
+  left: calc(100% + 10px);
+}
+
+#current-colors {
+  width: 100%;
+  height: 25px;
+  position: relative;
+  margin-top: 25px;
+}

@@ -1,3 +1,37 @@
+var myWorkers = cw({
+	test: function(a, cb) {
+		var array = new Float32Array(4);
+		cb(array);
+	},
+	test2: function(a, cb) {
+		++a[0];
+		cb(a);
+	},
+	test3: function(a, b, cb) {
+		cb(a + b);
+	},
+	renderField: function( field, cb ) {
+		var cX = 0, cY = 0,
+				p;
+
+			while(cY < height){
+				field.push.apply(field, pixelRenderer ? pixelRenderer(cX, cY, width, height, t) : [0,0]);
+
+				cX++;
+
+				if(cX === width){
+					cX = 0;
+					cY++;
+				}
+			}
+
+			return field;
+	},
+});
+
+
+
+
 var defaults = {
 		motionDisplay: {
       // Set the amount of particles per pixel
@@ -20,8 +54,10 @@ var defaults = {
 			sineXTile: 3,
 			sineYTile: 3,
 			createField: function(width, height, t, pixelRenderer){
-				console.log(t);
+				var field = new Float32Array( width * height );
 
+
+				console.log(t);
 				var field = [],
 					cX = 0, cY = 0,
 					p;
