@@ -44,7 +44,7 @@ function MotionDisplay(options){
   				g: 0,
   				b: 255
   			}, {
-  				t: 0.5,
+  				t: 0.2,
   				r: 0,
   				g: 255,
   				b: 0
@@ -65,24 +65,19 @@ function MotionDisplay(options){
   //   }
   // } );
   var buckets = getBuckets( gradient, [ 'r', 'g', 'b' ], 0, 6, function( bucket ) {
-  	bucket.children = [];
-  	bucket.clear = function() {
-  		bucket.children = [];
-  	};
+  	bucket.path = new Path2D();
+
   	var color = bucket.values;
   	bucket.color = colorToString( [ color.r, color.g, color.b ] );
   } );
-  
+
   var bucketTree = new BucketTree( buckets );
 
   this.getLeaf = function getLeaf( t ) {
   	return bucketTree.getLeaf( t );
-  }
+  };
 
   this.leafs = bucketTree.getLeafs([]).reverse();
-
-  console.log(bucketTree);
-  // debugger;
 
 	this.createParticles();
 
@@ -152,40 +147,33 @@ function MotionDisplay(options){
 		var i = 0,
 				particles = this.particles,
 				l = particles.length,
-				maxSpd = defaults.motionDisplay.particleSpdFactor,// / defaults.motionDisplay.particleMaxSpeed,
+				maxSpd = false ? defaults.motionDisplay.particleSpdFactor : defaults.motionDisplay.particleMaxSpeed,
 				spd,
 				p,
-				bucketRenderer;
+				path;
 
 		while(i < l){
 			p = particles[i++];
 			p.step(grid);
 
 			spd = Math.sqrt( Math.pow( p.dx, 2) + Math.pow( p.dy, 2 ) );
-			if( spd !== spd) debugger;//continue; //sometimes they get NaN
 
-			this.getLeaf( spd / maxSpd ).children.push( p );
-		}
-
-		bucketRenderer = function drawParticlesInBucket( particles, bucket ) {
-			if (!bucket.children.length ) return;
-			
-			ctx.beginPath();
-			ctx.strokeStyle = bucket.color;
-
-			i = 0;
-			while( i < l ) {
-				p = particles[i++];
-				ctx.moveTo( p.x, p.y );
-				ctx.lineTo( p.x - p.dx, p.y - p.dy );
+			if( spd !== spd ) {
+				//debugger;//continue; //sometimes they get NaN
 			}
 
-			ctx.stroke();
+			path = this.getLeaf( spd / maxSpd ).path;
+			path.moveTo( p.x, p.y );
+			path.lineTo( p.x - p.dx, p.y - p.dy );
+		}
 
-			bucket.clear();
-		}.bind(null, particles );
+		this.leafs.forEach( function drawPath( bucket ) {
+			ctx.strokeStyle = bucket.color;
 
-		this.leafs.forEach( bucketRenderer );
+			ctx.stroke(bucket.path);
+
+			bucket.path = new Path2D();
+		} );
 	};
 	this.renderField = function(){
 		var pt = Date.now(),

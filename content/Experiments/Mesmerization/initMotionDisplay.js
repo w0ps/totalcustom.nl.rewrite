@@ -7,7 +7,7 @@ function initMiniField(){
 				width: width,
 				height: height,
 				timePassing: true,
-				timeStep: 0.01
+				timeStep: 0.001
 			};
 
 	var motionDisplay = new MotionDisplay({

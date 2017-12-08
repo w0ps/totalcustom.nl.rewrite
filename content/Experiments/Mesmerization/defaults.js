@@ -1,15 +1,4 @@
 var myWorkers = cw({
-	test: function(a, cb) {
-		var array = new Float32Array(4);
-		cb(array);
-	},
-	test2: function(a, cb) {
-		++a[0];
-		cb(a);
-	},
-	test3: function(a, b, cb) {
-		cb(a + b);
-	},
 	renderField: function( field, cb ) {
 		var cX = 0, cY = 0,
 				p;
@@ -29,19 +18,16 @@ var myWorkers = cw({
 	},
 });
 
-
-
-
 var defaults = {
 		motionDisplay: {
       // Set the amount of particles per pixel
-			particleRatio: 0.0005,
+			particleRatio: 0.005,
       // Set the max age of the particles in simulation steps
 			particleMaxAge: 100,
       // Only used for creating testing fields
-			particleMaxSpeed: 10,
+			particleMaxSpeed: 5,
       // The speed of the particle flow
-			particleSpdFactor: 0.5,
+			particleSpdFactor: 1,
 		},
 		grid: {
 			generatedTSteps: 2 + Math.floor(Math.random() * 10),
@@ -75,7 +61,7 @@ var defaults = {
 
 				return field;
 			},
-			defaultFieldGenerator: 'circularFieldTuple',
+			defaultFieldGenerator: 'sineTuple',
 			//defaultFieldGenerator: 'identityTuple',
 			//defaultFieldGenerator: 'randomTuple',
 			//defaultFieldGenerator: 'sineTuple',
